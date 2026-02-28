@@ -4,7 +4,7 @@ __pycache__/
 build/
 dist/
 mistral_tuning_adapter/
-mistral_finetuned/
+mistral-finetuned/
 wheels/
 *.egg-info
 .python-version
