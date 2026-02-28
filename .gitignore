@@ -1,0 +1,14 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+mistral_tuning_adapter/
+mistral_finetuned/
+wheels/
+*.egg-info
+.python-version
+Data/
+
+# Virtual environments
+.venv
