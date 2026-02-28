@@ -1,4 +1,4 @@
-SynthCare: GDPR-Compliant Synthetic Health Data Generator
+# SynthCare: GDPR-Compliant Synthetic Health Data Generator
 A GAN-based solution for generating synthetic emergency health admission datasets, enabling public data sharing without violating GDPR.
 
 ## 📌 Overview
