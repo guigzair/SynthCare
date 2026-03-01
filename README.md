@@ -4,10 +4,11 @@ A GAN-based solution for generating synthetic emergency health admission dataset
 ## 📌 Overview
 SynthCare is a Generative Adversarial Network (GAN) designed to generate realistic, synthetic emergency health admission datasets. The goal is to provide a GDPR-compliant alternative to real patient data, allowing researchers, hospitals, and AI developers to:
 
-- Train models on realistic but anonymized data.
+- Train models on realistic but anonymized data 
 - Models are trained locally to ensure data privacy.
 - Avoid legal risks associated with real patient data under GDPR.
 - Share datasets publicly for collaborative research and AI development.
+- Trained on urgency admission medical sheets => => [MIMIC-III](https://physionet.org/content/mimic3-carevue/1.4/)
 
 This project was developed as part of [Mistral Worldwide Hacks](https://worldwide-hackathon.mistral.ai/) and focuses on automatic health admission files in emergency departments.
 
