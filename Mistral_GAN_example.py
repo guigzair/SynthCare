@@ -15,6 +15,7 @@ from peft import get_peft_model, LoraConfig, TaskType
 from torch.optim import Adam
 import numpy as np
 import weave
+import wandb
 
 
 class MistralGAN:
@@ -110,29 +111,7 @@ class MistralGAN:
         
         self.generator.train()
         return synthetic_data
-    
-    def discriminator_forward(self, texts, labels):
-        """
-        Get discriminator predictions and loss
-        """
-        inputs = self.tokenizer(
-            texts,
-            truncation=True,
-            max_length=512,
-            padding=True,
-            return_tensors="pt"
-        ).to(self.device)
-        
-        labels_tensor = torch.tensor(labels).to(self.device)
-        
-        outputs = self.discriminator(
-            input_ids=inputs['input_ids'],
-            attention_mask=inputs['attention_mask'],
-            labels=labels_tensor
-        )
-        
-        return outputs.loss, outputs.logits
-    
+
     def train_step(self, real_texts, real_labels, synthetic_texts, synthetic_labels, 
                    gen_optimizer, disc_optimizer):
         """
@@ -271,6 +250,19 @@ class MistralGAN:
         """
         Train the GAN
         """
+        wandb.init(
+            project="GAN-FineTuning",
+            config={
+                "num_epochs": num_epochs,
+                "learning_rate": learning_rate,
+                "model": "Ministral-3-3B-Instruct-2512",
+                "generator_lora_r": 8,
+                "discriminator_lora_r": 8,
+            },
+            name="mistral-gan-training"
+        )
+
+
         dataset = self.load_formatted_dataset(real_data_path=real_data_path)
         
         # Setup optimizers
@@ -306,6 +298,15 @@ class MistralGAN:
                     gen_optimizer,
                     disc_optimizer
                 )
+
+                wandb.log({
+                    "batch_disc_loss": losses['disc_loss'],
+                    "batch_gen_loss": losses['gen_loss'],
+                    "batch_gen_lm_loss": losses['gen_lm_loss'],
+                    "batch_gen_fool_loss": losses['gen_fool_loss'],
+                    "epoch": epoch,
+                    "batch": i // batch_size,
+                })
                 
                 epoch_losses['gen'].append(losses['gen_loss'])
                 epoch_losses['disc'].append(losses['disc_loss'])
@@ -319,10 +320,11 @@ class MistralGAN:
             
             # Save checkpoint
             if (epoch + 1) % 1 == 0:
-                self.generator.save_pretrained(f"./mistral_gan_generator_epoch_{epoch+1}")
-                self.discriminator.save_pretrained(f"./mistral_gan_discriminator_epoch_{epoch+1}")
+                self.generator.save_pretrained(f"./logs/mistral_gan_generator_epoch")
+                self.discriminator.save_pretrained(f"./logs/mistral_gan_discriminator_epoch")
         
         print("\nTraining complete!")
+        wandb.finish()
     
     def generate_dataset(self, num_samples=100, output_path="synthetic_data.jsonl"):
         """
@@ -343,14 +345,15 @@ class MistralGAN:
 
 # Usage example
 if __name__ == "__main__":
+    wandb.login()
     # Initialize GAN
     gan = MistralGAN(model_name="mistralai/Ministral-3-3B-Instruct-2512")
     
     # Train the GAN
     gan.train(
         real_data_path="clinical_stories.jsonl",
-        num_epochs=3,
-        learning_rate=2e-3
+        num_epochs=10,
+        learning_rate=2e-4
     )
     
     # Generate synthetic dataset
