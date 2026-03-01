@@ -14,6 +14,7 @@ from transformers import Mistral3ForConditionalGeneration, FineGrainedFP8Config
 from peft import get_peft_model, LoraConfig, TaskType
 from torch.optim import Adam
 import numpy as np
+import weave
 
 
 class MistralGAN:
