@@ -12,7 +12,7 @@ from peft import AutoPeftModelForCausalLM
 model_path = "mistral_tuning_adapter"
 base_model_name = "mistralai/Ministral-3-3B-Instruct-2512"
 model = Mistral3ForConditionalGeneration.from_pretrained(
-    base_model_name,
+    model_path,
     device_map="auto",          # Automatically chooses GPU/CPU
     torch_dtype=torch.bfloat16, # Matches Mistral's native precision
     trust_remote_code=True

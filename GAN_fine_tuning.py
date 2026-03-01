@@ -10,6 +10,9 @@ import torch
 from transformers import Mistral3ForConditionalGeneration, FineGrainedFP8Config
 import json
 
+##########################################################################
+####################### 1. Load a Model
+##########################################################################
 
 model_name = "mistralai/Ministral-3-3B-Instruct-2512"
 model = Mistral3ForConditionalGeneration.from_pretrained(
@@ -19,7 +22,7 @@ model = Mistral3ForConditionalGeneration.from_pretrained(
 )
 
 ##########################################################################
-################################### 2. Configure LoRA (Low-Rank Adaptation)
+####################### 2. Configure LoRA (Low-Rank Adaptation)
 ##########################################################################
 peft_config = LoraConfig(
     task_type=TaskType.CAUSAL_LM,
@@ -38,7 +41,7 @@ tokenizer.pad_token = tokenizer.eos_token
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 ##########################################################################
-################################## 3. Prepare your dataset jsonl format
+######################## 3. Prepare your dataset jsonl format
 ##########################################################################
 
 dataset = load_dataset("json", data_files={"train": "clinical_stories.jsonl"}, split="train")
@@ -60,7 +63,7 @@ formatted_data = [format_instruction_prompt(item) for item in dataset]
 dataset = Dataset.from_dict({'text': [item['text'] for item in formatted_data]})
 
 ##########################################################################
-################################### 4. Tokenize
+####################### 4. Tokenize
 ##########################################################################
 def tokenize_function(examples):
     outputs =  tokenizer(examples['text'], 
