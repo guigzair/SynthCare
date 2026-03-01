@@ -9,7 +9,7 @@ import json
 from peft import AutoPeftModelForCausalLM
 
 
-model_path = "mistral_tuning_adapter"
+model_path = "./logs/mistral_tuning_adapter"
 base_model_name = "mistralai/Ministral-3-3B-Instruct-2512"
 model = Mistral3ForConditionalGeneration.from_pretrained(
     model_path,

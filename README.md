@@ -27,3 +27,9 @@ Solution: Use a GAN to generate synthetic data that mimics real distributions bu
 - Open-source: Free to use, modify, and extend.
 
 But most importantely, it can be adapted to all kind of private or sensible informations worth enough to be shared.
+
+## GAN architecture
+![How a GAN works](images/GAN_image.png)
+
+## Streamlit UI 
+![UI](images/streamlit_image.png)
