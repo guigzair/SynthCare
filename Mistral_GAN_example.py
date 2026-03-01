@@ -352,7 +352,7 @@ if __name__ == "__main__":
     # Train the GAN
     gan.train(
         real_data_path="clinical_stories.jsonl",
-        num_epochs=10,
+        num_epochs=3,
         learning_rate=2e-4
     )
     
