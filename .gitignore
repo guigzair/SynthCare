@@ -9,6 +9,8 @@ wheels/
 *.egg-info
 .python-version
 Data/
+wandb/
+logs/
 
 # Virtual environments
 .venv
